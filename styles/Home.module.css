@@ -135,7 +135,7 @@
   margin-top: 50px;
 }
 
-.mainnav ul li, .mainnav a{
+.mainnav ul li{
   margin: 0 24px;
   list-style: none;
   font-weight: bold;
