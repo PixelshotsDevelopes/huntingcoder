@@ -1,25 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../styles/Blog.module.css'
 import Link from 'next/link'
-const Blog = () => {
-  return ( <div className={styles.container}>
+
+//Step 1: Collect all the files from blogdata directory
+//Step 2: Iterate through them and display them
+const Blog = (props) => {
+  console.log(props);
+  const [blogs, setBlogs] = useState(props.allBlogs);
+  // useEffect(() => {
+   
+  // }, [])
+  return (<div className={styles.container}>
     <main className={styles.main}>
-    <div >
-      <Link href={'/blogpost/learn-javascript'}><a>
-      <h3 className={styles.blogItemh3}>How to learn javascript in 2022?</h3></a></Link>
-      <p>Javascript is the language used to design logic for the web.</p>
-    </div>
-    <div className="blogItem">
-      <h3>How to learn javascript in 2022?</h3>
-      <p>Javascript is the language used to design logic for the web.</p>
-    </div>
-    <div className="blogItem">
-      <h3>How to learn javascript in 2022?</h3>
-      <p>Javascript is the language used to design logic for the web.</p>
-    </div>
+      {blogs.map((blogitem) => {
+        return <div key={blogitem.slug}>
+          <Link href={`/blogpost/${blogitem.slug}`}><a>
+            <h3 className={styles.blogItemh3}>{blogitem.title}</h3></a></Link>
+          <p className={styles.blogItemp}>{blogitem.content.substr(0, 140)}...</p>
+        </div>
+      })}
     </main>
   </div>
   )
 }
 
+export async function getServerSideProps(context) {
+  let data = await fetch('http://localhost:3000/api/blogs');
+  let allBlogs = await data.json();
+  
+  return {
+  props: {allBlogs}, // will be passed to the page component as props
+  }
+}
 export default Blog
